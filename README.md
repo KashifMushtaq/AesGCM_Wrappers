@@ -1,4 +1,4 @@
-# Repository projects demonstrate how AES 256 GCM Windows / Linux libraries could be used with docker containers using C#, Java and NodeJS)
+# Repository projects demonstrate how AES 256 GCM Linux library (libGcmAes.so) could be used with C#, Java and NodeJS wrappers in a docker container.
 
 ![C# Wrapper](/Run.png)
 
@@ -8,7 +8,7 @@ This article will help you implement very strong, cross platform, AES 256 GCM en
 
 ![C# Test](/Test.png)
 
-### Deploy libGcmAes.so
+### Deploying libGcmAes.so
 
 Don't forget **Copy Always** with docker. If deploying image in docker it must be in bin folder where other .Net core binaries are.
 
