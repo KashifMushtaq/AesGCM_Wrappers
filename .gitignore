@@ -5,3 +5,4 @@
 *.user
 /AspCoreWeb/obj
 /AspCoreWeb/.vs
+/AspCoreWeb/bin
