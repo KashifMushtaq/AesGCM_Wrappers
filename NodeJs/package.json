@@ -1,8 +1,17 @@
 {
     "name": "NodeJs",
     "version": "1.0.0",
-    "keywords": ["util", "functional", "server", "client", "browser"],
+    "keywords": [
+        "util",
+        "functional",
+        "server",
+        "client",
+        "browser"
+    ],
     "author": "kmushtaq",
     "contributors": [],
-    "dependencies": {}
+    "dependencies": {
+        "ffi-napi": "^4.0.3",
+        "ref-napi": "^3.0.3"
+    }
 }

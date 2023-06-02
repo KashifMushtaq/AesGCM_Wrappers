@@ -22,8 +22,8 @@ SOFTWARE.
 
 var Api = require('./AesGcmHelper');
 
-var HexKey;
-var HexIv;
+var HexKey = {v: ""};
+var HexIv = {v: ""};
 var KeyLength = 0;
 var IvLength = 0;
 
@@ -35,10 +35,10 @@ if (result) {
     console.log("------------------------- _getNewAESKeyAndIv -------------------------\n");
 
     console.log("Key:");
-    console.log("%s", HexKey);
+    console.log("%s", HexKey.v);
 
     console.log("Iv:");
-    console.log("%s", HexIv);
+    console.log("%s", HexIv.v);
 
     console.log("\n------------------------- _getNewAESKeyAndIv -------------------------\n");
 

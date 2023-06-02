@@ -38,7 +38,7 @@ if (process.arch !== 'x64')
 
 // At his moment only Linux, MacOS, Android and Apple OS are supported
 if (process.platform === "linux") {
-    LD_LIBRARY_PATH = './libDidtHelper.so';
+    LD_LIBRARY_PATH = './libGcmAes.so';
 } else if (process.platform === "darwin") {
     LD_LIBRARY_PATH = './libGcmAes.dylib';
 }
@@ -59,12 +59,12 @@ module.exports = {
     }
     ,
     unloadFFI: function unloadFFI() {
-        var name = require.resolve('ffi');
+        var name = require.resolve('ffi-napi');
         delete require.cache[name];
     }
     ,
     unloadREF: function unloadREF() {
-        var name = require.resolve('ref');
+        var name = require.resolve('ref-napi');
         delete require.cache[name];
     }
     ,
@@ -75,8 +75,8 @@ module.exports = {
          *
          * @type Module ref|Module ref
          */
-        var ref = require('ref');
-        var ffi = require('ffi');
+        var ref = require('ref-napi');
+        var ffi = require('ffi-napi');
 
 
         // typedefs
@@ -106,9 +106,11 @@ module.exports = {
 
         if (boolReturn) {
 
-            HexKey = this.getDataFromPointer(ref, outHexKey);
-            
-            HexIv = this.getDataFromPointer(ref, outHexIv);
+            console.log("\n _getNewAESKeyAndIv ==> OK \n");
+
+            HexKey.v = this.getDataFromPointer(ref, outHexKey);
+
+            HexIv.v = this.getDataFromPointer(ref, outHexIv);
 
             KeyLength = outKeyLength.deref();
 
@@ -116,6 +118,8 @@ module.exports = {
 
             return true;
 
+        } else {
+            console.log("\n _getNewAESKeyAndIv ==> FAILED \n");
         }
 
         return false;
