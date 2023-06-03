@@ -137,8 +137,8 @@ To use in your own **NodeJS** project, just have to include library and **AesGcm
 ### Prerequisites:
 Use **yum**, **dnf** or **apt-get** to install **nodejs** and **npm** packages. Then use **npm** to install:
 
-    - npm install --save -g ref-napi
-    - npm install --save -g ffi-napi
+    - sudo npm install --save -g ref-napi
+    - sudo npm install --save -g ffi-napi
 
 ![NodeJS Project](/node1.png)
 
