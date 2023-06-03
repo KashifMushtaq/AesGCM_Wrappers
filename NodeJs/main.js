@@ -24,8 +24,8 @@ var Api = require('./AesGcmHelper');
 
 var HexKey = {v: ""};
 var HexIv = {v: ""};
-var KeyLength = 0;
-var IvLength = 0;
+var KeyLength = {v: 0};
+var IvLength = {v: 0};
 
 
 var result = Api._getNewAESKeyAndIv(HexKey, HexIv, KeyLength, IvLength);
@@ -36,13 +36,72 @@ if (result) {
 
     console.log("Key:");
     console.log("%s", HexKey.v);
+    console.log("Key Len: %s", KeyLength.v);
 
-    console.log("Iv:");
+    console.log("\nIv:");
     console.log("%s", HexIv.v);
+    console.log("IV Len: %s", IvLength.v);
 
     console.log("\n------------------------- _getNewAESKeyAndIv -------------------------\n");
 
 } else {
 
     console.log("\n _getNewAESKeyAndIv FAILED \n");
+}
+
+
+/***
+ *  If do not see Japanese characters, please change Netbeans -> Tools -> Options -> Fonts & Color -> Syntax -> Font to SansSerif (or any other which support Japanese Characters (Not all UTF-8 fonts do that)
+ * @type String
+ */
+var PlainText = "Syllabic kana – hiragana(平仮名) and katakana(片仮名)";
+
+var EncryptedBase64 = {v: ""};
+var DataLength = {v: PlainText.length};
+
+var result = Api._encrypt_GcmAes256(HexKey.v, HexIv.v, PlainText, EncryptedBase64, DataLength);
+
+if (result) {
+
+    console.log("------------------------- _encrypt_GcmAes256 -------------------------\n");
+
+    console.log("Plain Text:");
+    console.log("%s", PlainText);
+    console.log("Encrypted: %s", EncryptedBase64.v);
+    console.log("Len: %s", DataLength.v);
+
+    console.log("\n------------------------- _encrypt_GcmAes256 -------------------------\n");
+
+} else {
+
+    console.log("\n _encrypt_GcmAes256 FAILED \n");
+}
+
+
+
+var DecryptedText = {v: ""};
+var DataLength = {v: EncryptedBase64.v.length};
+
+var result = Api._decrypt_GcmAes256(HexKey.v, HexIv.v, EncryptedBase64.v, DecryptedText, DataLength);
+
+if (result) {
+
+    console.log("------------------------- _decrypt_GcmAes256 -------------------------\n");
+
+    console.log("Encrypted Text:");
+    console.log("%s", EncryptedBase64.v);
+    console.log("Decrypted: %s", DecryptedText.v);
+    console.log("Len: %s", DataLength.v);
+
+    console.log("\n------------------------- _decrypt_GcmAes256 -------------------------\n");
+
+} else {
+
+    console.log("\n _decrypt_GcmAes256 FAILED \n");
+}
+
+if (DecryptedText.v.localeCompare(PlainText)) {
+    console.log("\n------------------------- Encryption / Decryption Test OK  -------------------------\n");
+} else {
+    console.log("\n------------------------- Encryption / Decryption Test FAILED  -------------------------\n");
 }
