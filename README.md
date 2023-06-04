@@ -497,4 +497,4 @@ At the moment, I haven't coded a sample but I already have a **Bouncy Castle** b
 ### [Linux Lib](https://github.com/KashifMushtaq/AesGcm_Linux)
 ### [Windows DLL](https://github.com/KashifMushtaq/AesGcm_Windows)
 
-The samples are coded using Microsoft Visual Studio 2022.
+The samples are coded using **Microsoft Visual Studio 2022** and **Netbeans 17 IDE**.
