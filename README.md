@@ -227,6 +227,15 @@ module.exports = {
         delete require.cache[name];
     }
     ,
+    /***
+     * Returns string lenth as utf-8
+     * @param {type} str
+     * @returns {unresolved}
+     */
+    lengthInUtf8Bytes: function lengthInUtf8Bytes(str) {
+        return Buffer.byteLength(str, 'utf8');
+    }
+    ,
 
     /***
      * Function to generate new Key and IV for AES 256 GCM. Returned Key and IV is Hex encoded.
@@ -295,7 +304,7 @@ module.exports = {
     },
 
     /***
-     *  Function to encryption based on AES 256 GCM algorithm. Returns true on success.
+     *  Function to encrypt based on AES 256 GCM algorithm. Returns true on success.
      * @param {type} inHexKey
      * @param {type} inHexIv
      * @param {type} inPlainText
@@ -321,17 +330,17 @@ module.exports = {
 
         var HexKey = Buffer.alloc(inHexKey.length + 1);
         HexKey.type = charPtr;
-        HexKey.writeCString(inHexKey, 0, "UTF-8");
+        HexKey.writeCString(inHexKey, 0);
 
         var HexIv = Buffer.alloc(inHexIv.length + 1);
         HexIv.type = charPtr;
         HexIv.writeCString(inHexIv, 0);
 
-        var PlainText = Buffer.alloc(inPlainText.length + 1);
+        var PlainText = Buffer.alloc(this.lengthInUtf8Bytes(inPlainText) + 1);
         PlainText.type = charPtr;
-        PlainText.writeCString(inPlainText, 0, "UTF-8");
+        PlainText.writeCString(inPlainText, 0);
 
-        var EncryptedBase64 = Buffer.alloc(inPlainText.length * 2);
+        var EncryptedBase64 = Buffer.alloc(this.lengthInUtf8Bytes(inPlainText) * 2);
         PlainText.type = charPtrPtr;
 
         var DataLength = ref.alloc('int');
@@ -391,7 +400,7 @@ module.exports = {
 
         var HexKey = Buffer.alloc(inHexKey.length + 1);
         HexKey.type = charPtr;
-        HexKey.writeCString(inHexKey, 0, "UTF-8");
+        HexKey.writeCString(inHexKey, 0);
 
         var HexIv = Buffer.alloc(inHexIv.length + 1);
         HexIv.type = charPtr;
@@ -399,7 +408,7 @@ module.exports = {
 
         var EncryptedBase64 = Buffer.alloc(inBase64Text.length + 1);
         EncryptedBase64.type = charPtr;
-        EncryptedBase64.writeCString(inBase64Text, 0, "UTF-8");
+        EncryptedBase64.writeCString(inBase64Text, 0);
 
         var DecryptedText = Buffer.alloc(inBase64Text.length * 4);
         DecryptedText.type = charPtrPtr;
@@ -421,7 +430,6 @@ module.exports = {
 
             outDecryptedText.v = this.getDataFromPointer(ref, DecryptedText);
 
-
             outDataLength.v = DataLength.deref();
 
             return true;
@@ -437,28 +445,31 @@ module.exports = {
 
 
 
+
 ```
 
 ## NodeJS Output
 
 ```
 
-"/bin/node" "/home/kmushtaq/Downloads/AesGCM_Wrappers/NodeJs/main.js"
+"/usr/bin/node" "/home/kashif/Downloads/AesGCM_Wrappers/NodeJs/main.js"
 
  _getNewAESKeyAndIv ==> OK 
 
 ------------------------- _getNewAESKeyAndIv -------------------------
 
 Key:
-63A0A9874CF9D5A4AC4234B01A4CA38E38A2793503DB62734509C98A99F4544A
+459C98767E4BF6C54AC98393A71D4C6CF596DEC9D389F8E4477556A046FA8C7D
 Key Len: 64
 
 Iv:
-11547D4E1D3E130456AD949FC252001C
+F79F555BAC67D0FFEC7C0093150DD5EE
 IV Len: 32
 
 ------------------------- _getNewAESKeyAndIv -------------------------
 
+UTF-8 Text Byte Len: 61
+ASII Text Len: 47. Not correct
 
  _encrypt_GcmAes256 ==> OK 
 
@@ -466,8 +477,9 @@ IV Len: 32
 
 Plain Text:
 Syllabic kana – hiragana(平仮名) and katakana(片仮名)
-Encrypted: jW4iyiLLBdxIBAF+6LXgoaPnX0VnFwXlVVP3wlrJqmOk/8LLmZjmNz9RhV63RcsAoTinXOop9kRZBdLoAUJR
-Len: 84
+Len 61
+Encrypted: KI0eubR8Jl7B28vV6u0QHVTkJVxdo/t5UZJJ1b+ICbjeGvw0VlaZxTkQ+fNEX0pM1FXzeZSaSlVawKGCceE/TEVkaOL6mZzOAKQspY8=
+Len: 104
 
 ------------------------- _encrypt_GcmAes256 -------------------------
 
@@ -477,9 +489,10 @@ Len: 84
 ------------------------- _decrypt_GcmAes256 -------------------------
 
 Encrypted Text:
-jW4iyiLLBdxIBAF+6LXgoaPnX0VnFwXlVVP3wlrJqmOk/8LLmZjmNz9RhV63RcsAoTinXOop9kRZBdLoAUJR
-Decrypted: Syllabic kana – hiragana(平仮名) and katak
-Len: 47
+KI0eubR8Jl7B28vV6u0QHVTkJVxdo/t5UZJJ1b+ICbjeGvw0VlaZxTkQ+fNEX0pM1FXzeZSaSlVawKGCceE/TEVkaOL6mZzOAKQspY8=
+Plain Text: Syllabic kana – hiragana(平仮名) and katakana(片仮名)
+Decrypted: Syllabic kana – hiragana(平仮名) and katakana(片仮名)
+Len: 61
 
 ------------------------- _decrypt_GcmAes256 -------------------------
 
