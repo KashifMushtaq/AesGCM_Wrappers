@@ -147,7 +147,7 @@ module.exports = {
     },
 
     /***
-     *  Function to encryption based on AES 256 GCM algorithm. Returns true on success.
+     *  Function to encrypt based on AES 256 GCM algorithm. Returns true on success.
      * @param {type} inHexKey
      * @param {type} inHexIv
      * @param {type} inPlainText
