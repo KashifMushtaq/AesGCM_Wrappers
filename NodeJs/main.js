@@ -18,9 +18,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
 var Api = require('./AesGcmHelper');
+
 
 var HexKey = {v: ""};
 var HexIv = {v: ""};
@@ -54,19 +55,22 @@ if (result) {
  *  If do not see Japanese characters, please change Netbeans -> Tools -> Options -> Fonts & Color -> Syntax -> Font to SansSerif (or any other which support Japanese Characters (Not all UTF-8 fonts do that)
  * @type String
  */
-var PlainText = "Syllabic kana – hiragana(平仮名) and katakana(片仮名)";
+var PlainText = {v: "Syllabic kana – hiragana(平仮名) and katakana(片仮名)"};
+var len = lengthInUtf8Bytes(PlainText.v);
+console.log("UTF-8 Text Byte Len: %s", len);
 
 var EncryptedBase64 = {v: ""};
-var DataLength = {v: PlainText.length};
+var DataLength = {v: len};
 
-var result = Api._encrypt_GcmAes256(HexKey.v, HexIv.v, PlainText, EncryptedBase64, DataLength);
+var result = Api._encrypt_GcmAes256(HexKey.v, HexIv.v, PlainText.v, EncryptedBase64, DataLength);
 
 if (result) {
 
     console.log("------------------------- _encrypt_GcmAes256 -------------------------\n");
 
     console.log("Plain Text:");
-    console.log("%s", PlainText);
+    console.log("%s", PlainText.v);
+    console.log("Len %s", len);
     console.log("Encrypted: %s", EncryptedBase64.v);
     console.log("Len: %s", DataLength.v);
 
@@ -80,7 +84,7 @@ if (result) {
 
 
 var DecryptedText = {v: ""};
-var DataLength = {v: EncryptedBase64.v.length};
+DataLength = {v: EncryptedBase64.v.length};
 
 var result = Api._decrypt_GcmAes256(HexKey.v, HexIv.v, EncryptedBase64.v, DecryptedText, DataLength);
 
@@ -90,6 +94,7 @@ if (result) {
 
     console.log("Encrypted Text:");
     console.log("%s", EncryptedBase64.v);
+    console.log("Plain Text: %s", PlainText.v);
     console.log("Decrypted: %s", DecryptedText.v);
     console.log("Len: %s", DataLength.v);
 
@@ -100,8 +105,14 @@ if (result) {
     console.log("\n _decrypt_GcmAes256 FAILED \n");
 }
 
-if (DecryptedText.v.localeCompare(PlainText)) {
+if (DecryptedText.v === PlainText.v) {
     console.log("\n------------------------- Encryption / Decryption Test OK  -------------------------\n");
 } else {
     console.log("\n------------------------- Encryption / Decryption Test FAILED  -------------------------\n");
+}
+
+function lengthInUtf8Bytes(str) {
+  // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+  var m = encodeURIComponent(str).match(/%[89ABab]/g);
+  return str.length + (m ? m.length : 0);
 }

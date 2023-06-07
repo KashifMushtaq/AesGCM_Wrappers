@@ -79,6 +79,12 @@ module.exports = {
         delete require.cache[name];
     }
     ,
+    lengthInUtf8Bytes: function lengthInUtf8Bytes(str) {
+        // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+        var m = encodeURIComponent(str).match(/%[89ABab]/g);
+        return str.length + (m ? m.length : 0);
+    }
+    ,
 
     /***
      * Function to generate new Key and IV for AES 256 GCM. Returned Key and IV is Hex encoded.
@@ -173,17 +179,17 @@ module.exports = {
 
         var HexKey = Buffer.alloc(inHexKey.length + 1);
         HexKey.type = charPtr;
-        HexKey.writeCString(inHexKey, 0, "UTF-8");
+        HexKey.writeCString(inHexKey, 0);
 
         var HexIv = Buffer.alloc(inHexIv.length + 1);
         HexIv.type = charPtr;
         HexIv.writeCString(inHexIv, 0);
 
-        var PlainText = Buffer.alloc(inPlainText.length + 1);
+        var PlainText = Buffer.alloc(this.lengthInUtf8Bytes(inPlainText) + 1);
         PlainText.type = charPtr;
-        PlainText.writeCString(inPlainText, 0, "UTF-8");
+        PlainText.writeCString(inPlainText, 0);
 
-        var EncryptedBase64 = Buffer.alloc(inPlainText.length * 2);
+        var EncryptedBase64 = Buffer.alloc(this.lengthInUtf8Bytes(inPlainText) * 2);
         PlainText.type = charPtrPtr;
 
         var DataLength = ref.alloc('int');
@@ -243,7 +249,7 @@ module.exports = {
 
         var HexKey = Buffer.alloc(inHexKey.length + 1);
         HexKey.type = charPtr;
-        HexKey.writeCString(inHexKey, 0, "UTF-8");
+        HexKey.writeCString(inHexKey, 0);
 
         var HexIv = Buffer.alloc(inHexIv.length + 1);
         HexIv.type = charPtr;
@@ -251,7 +257,7 @@ module.exports = {
 
         var EncryptedBase64 = Buffer.alloc(inBase64Text.length + 1);
         EncryptedBase64.type = charPtr;
-        EncryptedBase64.writeCString(inBase64Text, 0, "UTF-8");
+        EncryptedBase64.writeCString(inBase64Text, 0);
 
         var DecryptedText = Buffer.alloc(inBase64Text.length * 4);
         DecryptedText.type = charPtrPtr;
@@ -272,7 +278,6 @@ module.exports = {
             console.log("\n _decrypt_GcmAes256 ==> OK \n");
 
             outDecryptedText.v = this.getDataFromPointer(ref, DecryptedText);
-
 
             outDataLength.v = DataLength.deref();
 
