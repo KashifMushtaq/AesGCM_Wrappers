@@ -79,8 +79,13 @@ module.exports = {
         delete require.cache[name];
     }
     ,
+    /***
+     * Returns string lenth as utf-8
+     * @param {type} str
+     * @returns {unresolved}
+     */
     lengthInUtf8Bytes: function lengthInUtf8Bytes(str) {
-        return Buffer.byteLength(str, 'UTF-8');
+        return Buffer.byteLength(str, 'utf8');
     }
     ,
 

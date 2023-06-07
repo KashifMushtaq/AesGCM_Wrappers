@@ -58,6 +58,7 @@ if (result) {
 var PlainText = {v: "Syllabic kana – hiragana(平仮名) and katakana(片仮名)"};
 var len = lengthInUtf8Bytes(PlainText.v);
 console.log("UTF-8 Text Byte Len: %s", len);
+console.log("ASII Text Len: %s. Not correct", PlainText.v.length);
 
 var EncryptedBase64 = {v: ""};
 var DataLength = {v: len};
@@ -112,5 +113,5 @@ if (DecryptedText.v === PlainText.v) {
 }
 
 function lengthInUtf8Bytes(str) {
-    return Buffer.byteLength(str, 'UTF-8');
+    return Buffer.byteLength(str, "utf8");
 }
